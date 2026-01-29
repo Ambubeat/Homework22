@@ -23,6 +23,7 @@ public:
 	char* GetArray();
 	void SetSize(int set);
 	void UpdateData(const char* newData, int newSize);
+	MyString(MyString&& other) noexcept;
 
 	//operands
 	char operator[](int index) const;
@@ -30,8 +31,11 @@ public:
 	MyString operator+(char c);
 	//MyString operator+(char );
 	MyString operator+(int c);
+	MyString& operator=(MyString&& other) noexcept;
 };
 
 MyString operator+(char c, const MyString obj);
 MyString operator+(int c, const MyString obj);
 MyString operator++(MyString& obj, int);
+std::ostream& operator<<(std::ostream& os, MyString& obj);
+std::istream& operator>>(std::istream& is, MyString& obj);

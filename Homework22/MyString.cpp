@@ -201,6 +201,14 @@ void MyString::UpdateData(const char* newData, int newSize)
 	this->ptr[this->size] = '\0';
 }
 
+MyString::MyString(MyString&& other) noexcept {
+	this->ptr = other.ptr;  
+	this->size = other.size;
+
+	other.ptr = nullptr; 
+	other.size = 0;          
+}
+
 
 
 char MyString::operator[](int index) const {
@@ -323,3 +331,32 @@ MyString operator++(MyString& obj, int)
 
 }
 
+std::ostream& operator<<(std::ostream& os, MyString& obj) {
+	const char* data = obj.GetArray();
+	if (data) {
+		os << data;
+	}
+	return os;
+}
+
+std::istream& operator>>(std::istream& is, MyString& obj) {
+	char buffer[1024];
+	if (is >> buffer) {
+		obj.UpdateData(buffer, (int)strlen(buffer));
+	}
+	return is;
+}
+
+MyString& MyString::operator=(MyString&& other) noexcept {
+	if (this == &other) return *this;
+
+	delete[] ptr;
+
+	this->ptr = other.ptr;
+	this->size = other.size;
+
+	other.ptr = nullptr;
+	other.size = 0;
+
+	return *this;
+}
